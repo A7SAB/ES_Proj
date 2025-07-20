@@ -23,9 +23,8 @@
 #define PZEM_RX_PIN 16 // Connect to TX pin of PZEM
 #define PZEM_TX_PIN 17 // Connect to RX pin of PZEM
 
-const char* ssid = "YOUR-WIFI";
-const char* password = "YOUR-PASSWORD";
-
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
 
 // Constructor for I2C 128x64 OLED
 U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0);
