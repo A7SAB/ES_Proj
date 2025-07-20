@@ -123,3 +123,9 @@ Open the main code file and update these lines:
 ```cpp
 const char* ssid = "YOUR_WIFI_SSID";
 const char* password = "YOUR_WIFI_PASSWORD";
+```
+
+## ⚠️ Known Issues
+- Web page issues with manual control, currenlty its advisable to use the OLED Menu only. 
+
+
