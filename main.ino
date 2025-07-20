@@ -407,12 +407,8 @@ void readSensors() {
     }
     Serial.printf(" V:%.1f V, I:%.3f A, P:%.2f W, E:%.3f kWh, PF:%.2f\n",
     sensorVoltage, sensorCurrent, sensorPower, sensorEnergy, sensorPowerFactor);
-
-    // --- Keep placeholder update logic for now ---
-    // You could add logic here to simulate changing values if desired
-    // sensorVoltage += random(-10, 11) / 10.0; // Example simulation
      if (currentState == SHOW_READINGS) {
-          drawShowReadingsPage(); // Redraw readings page if it's active
+          drawShowReadingsPage(); 
      }
      // --- End placeholder ---
 }
@@ -438,7 +434,7 @@ void handleButtons() {
                     case 0: currentState = SHOW_READINGS; drawShowReadingsPage(); break;
                     case 1: currentState = WIFI_INFO; drawWifiInfoPage(); break;
                     case 2: currentState = SCHEDULE; currentScheduleSubState = SELECT_ENABLED; drawSchedulePage(); break;
-                    case 3: // [NEW] Navigate to Relay Control Page
+                    case 3: 
                         currentState = RELAY_CONTROL;
                         currentRelayControlSubState = SELECT_MANUAL_STATE;
                         drawRelayControlPage();
@@ -523,7 +519,6 @@ void handleButtons() {
             }
             break;
 
-        // [NEW] Handle buttons for Edit Current Limit Page
         case EDIT_CURRENT_LIMIT:
             if (selectPressed) { // "CONFIRM" or "SAVE"
                 if (currentEditLimitSubState == ADJUST_LIMIT_VALUE) {
@@ -646,18 +641,31 @@ void drawSchedulePage() {
     u8g2.setFont(u8g2_font_4x6_tr); u8g2.drawStr(7, 20, "USE SCHEDULING:");
     u8g2.setFont(u8g2_font_5x7_tr); int yesX = 81; int noX = 104;
     u8g2.drawStr(yesX, 21, "YES"); u8g2.drawStr(noX, 21, "NO");
-    if (scheduleEnabled) { u8g2.drawBox(yesX - 1, 14, u8g2.getStrWidth("YES") + 2, 9); u8g2.setDrawColor(0); u8g2.drawStr(yesX, 21, "YES"); u8g2.setDrawColor(1); }
-    else { u8g2.drawBox(noX - 1, 14, u8g2.getStrWidth("NO") + 2, 9); u8g2.setDrawColor(0); u8g2.drawStr(noX, 21, "NO"); u8g2.setDrawColor(1); }
-    if (currentScheduleSubState == SELECT_ENABLED) { drawHighlight(4, 13, 120, 11); }
+    if (scheduleEnabled){ 
+      u8g2.drawBox(yesX - 1, 14, u8g2.getStrWidth("YES") + 2, 9);
+      u8g2.setDrawColor(0); u8g2.drawStr(yesX, 21, "YES"); 
+      u8g2.setDrawColor(1);
+    }
+    else { u8g2.drawBox(noX - 1, 14, u8g2.getStrWidth("NO") + 2, 9); 
+          u8g2.setDrawColor(0); 
+          u8g2.drawStr(noX, 21, "NO"); 
+          u8g2.setDrawColor(1); }
+    if (currentScheduleSubState == SELECT_ENABLED){ 
+      drawHighlight(4, 13, 120, 11); 
+    }
 
     int iconY = 28; int timeTextY = 36; int timeValueY = 48;
     u8g2.drawXBM(5, iconY, 19, 20, image_On_logo_bits); u8g2.drawXBM(68, iconY, 19, 20, image_off_logo_bits);
     u8g2.setFont(u8g2_font_5x7_tr); u8g2.drawStr(28, timeTextY, "ON AT:"); u8g2.drawStr(91, timeTextY, "OFF AT:");
     u8g2.setFont(u8g2_font_4x6_tr);
     snprintf(buffer, sizeof(buffer), "%02d:%02d %s", scheduleOnHour, scheduleOnMinute, scheduleOnIsPM ? "PM" : "AM"); u8g2.drawStr(27, timeValueY, buffer);
-    if (currentScheduleSubState == SELECT_ON_TIME) { drawHighlight(4, iconY - 1, 60, 23); }
+    if (currentScheduleSubState == SELECT_ON_TIME) { 
+      drawHighlight(4, iconY - 1, 60, 23);
+    }
     snprintf(buffer, sizeof(buffer), "%02d:%02d %s", scheduleOffHour, scheduleOffMinute, scheduleOffIsPM ? "PM" : "AM"); u8g2.drawStr(89, timeValueY, buffer);
-    if (currentScheduleSubState == SELECT_OFF_TIME) { drawHighlight(67, iconY - 1, 58, 23); }
+    if (currentScheduleSubState == SELECT_OFF_TIME) { 
+      drawHighlight(67, iconY - 1, 58, 23);
+    }
     drawPersistentElements(); u8g2.sendBuffer();
 }
 
@@ -670,15 +678,23 @@ void drawSetTimePage() {
     int minX = colon1X + u8g2.getStrWidth(":") + 3; int ampmX = minX + u8g2.getStrWidth("00") + 5;
     u8g2.setFont(u8g2_font_7x14B_tr);
     snprintf(buffer, sizeof(buffer), "%02d", tempHour); u8g2.drawStr(hourX, timeY, buffer);
-    if (currentSetTimeSubState == EDIT_HOUR) { drawHighlight(hourX - 1, timeY - 11, u8g2.getStrWidth(buffer) + 2, 14); }
+    if (currentSetTimeSubState == EDIT_HOUR) { 
+      drawHighlight(hourX - 1, timeY - 11, u8g2.getStrWidth(buffer) + 2, 14); 
+    }
     u8g2.drawStr(colon1X, timeY, ":");
     snprintf(buffer, sizeof(buffer), "%02d", tempMinute); u8g2.drawStr(minX, timeY, buffer);
-    if (currentSetTimeSubState == EDIT_MINUTE) { drawHighlight(minX - 1, timeY - 11, u8g2.getStrWidth(buffer) + 2, 14); }
+    if (currentSetTimeSubState == EDIT_MINUTE) {
+      drawHighlight(minX - 1, timeY - 11, u8g2.getStrWidth(buffer) + 2, 14);
+    }
     u8g2.drawStr(ampmX, timeY, tempIsPM ? "PM" : "AM");
-    if (currentSetTimeSubState == EDIT_AMPM) { drawHighlight(ampmX - 1, timeY - 11, u8g2.getStrWidth("MM") + 2, 14); }
+    if (currentSetTimeSubState == EDIT_AMPM) { 
+      drawHighlight(ampmX - 1, timeY - 11, u8g2.getStrWidth("MM") + 2, 14);
+    }
     int saveY = 50; const char* saveText = "[SAVE & EXIT]"; int saveX = u8g2.getDisplayWidth()/2 - u8g2.getStrWidth(saveText)/2;
     u8g2.setFont(u8g2_font_5x7_tr); u8g2.drawStr(saveX, saveY, saveText);
-    if (currentSetTimeSubState == SAVE_EXIT) { drawHighlight(saveX - 2, saveY - 7, u8g2.getStrWidth(saveText) + 4, 10); }
+    if (currentSetTimeSubState == SAVE_EXIT) { 
+      drawHighlight(saveX - 2, saveY - 7, u8g2.getStrWidth(saveText) + 4, 10);
+    }
     drawPersistentElements(); u8g2.sendBuffer();
 }
 
@@ -761,14 +777,30 @@ void drawEditCurrentLimitPage() {
 // drawRotatingMenu (unchanged)
 void drawRotatingMenu(int selected) {
     u8g2.clearBuffer(); u8g2.setFontMode(1); u8g2.setBitmapMode(1); u8g2.setFont(u8g2_font_4x6_tr);
-    int leftIndex = (selected - 1 + menuItemCount) % menuItemCount; int centerIndex = selected; int rightIndex = (selected + 1) % menuItemCount;
-    int iconYOffset = 8; int lw = iconWidths[leftIndex]; int lh = iconHeights[leftIndex];
-    u8g2.drawXBM(20, 23 + iconYOffset, lw, lh, icons[leftIndex]); int rw = iconWidths[rightIndex]; int rh = iconHeights[rightIndex];
-    u8g2.drawXBM(90, 23 + iconYOffset, rw, rh, icons[rightIndex]); const char* currentLabel = menuLabels[centerIndex];
-    int labelWidth = u8g2.getStrWidth(currentLabel); int labelX = 64 - labelWidth / 2; int labelY = 18;
-    u8g2.drawStr(labelX, labelY, currentLabel); u8g2.drawXBM(55, 22 + iconYOffset, 18, 18, image_selection);
-    int cw = iconWidths[centerIndex]; int ch = iconHeights[centerIndex]; int cx = 64 - cw / 2; int cy = 23 + iconYOffset;
-    u8g2.drawXBM(cx, cy, cw, ch, icons[centerIndex]); drawPersistentElements(); u8g2.sendBuffer();
+    int leftIndex = (selected - 1 + menuItemCount) % menuItemCount; 
+    int centerIndex = selected; 
+    int rightIndex = (selected + 1) % menuItemCount;
+    int iconYOffset = 8; 
+    int lw = iconWidths[leftIndex];
+    int lh = iconHeights[leftIndex];
+    u8g2.drawXBM(20, 23 + iconYOffset, lw, lh, icons[leftIndex]); 
+  
+    int rw = iconWidths[rightIndex]; 
+    int rh = iconHeights[rightIndex];
+    u8g2.drawXBM(90, 23 + iconYOffset, rw, rh, icons[rightIndex]);
+  
+    const char* currentLabel = menuLabels[centerIndex];
+    int labelWidth = u8g2.getStrWidth(currentLabel); 
+    int labelX = 64 - labelWidth / 2; 
+    int labelY = 18;
+  
+    u8g2.drawStr(labelX, labelY, currentLabel); 
+    u8g2.drawXBM(55, 22 + iconYOffset, 18, 18, image_selection);
+    int cw = iconWidths[centerIndex]; 
+    int ch = iconHeights[centerIndex]; 
+    int cx = 64 - cw / 2; int cy = 23 + iconYOffset;
+    u8g2.drawXBM(cx, cy, cw, ch, icons[centerIndex]); 
+    drawPersistentElements(); u8g2.sendBuffer();
 }
 
 // --- Relay Control Logic (FIXED) ---
